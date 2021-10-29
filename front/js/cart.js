@@ -7,12 +7,13 @@ function getProduct(url) {
     for (let i = 0; i < localStorage.length; i++) {
         let productArray=JSON.parse(localStorage.getItem(localStorage.key(i)));
         let productId=productArray[0];
+        let productColor=productArray[1];
         let productQuantity=productArray[2];
         let fetchURL = "http://localhost:3000/api/products/" + productId;
         let product = await getProduct(fetchURL);
         let article=document.createElement("article");
         article.setAttribute("class", "cart__item");
-        article.setAttribute("data-id",productId);
+        article.setAttribute("data-id",productId+productColor);
         let cart__item__img=document.createElement("div");
         cart__item__img.setAttribute("class", "cart__item__img");
         let img=document.createElement("img");
@@ -23,7 +24,7 @@ function getProduct(url) {
         let cart__item__content__titlePrice=document.createElement("div");
         cart__item__content__titlePrice.setAttribute("class","cart__item__content__titlePrice");
         let h2=document.createElement("h2");
-        h2.innerText=product.name;
+        h2.innerText=product.name+" "+productColor;
         let pPrice=document.createElement("p");
         pPrice.innerText=product.price+"€";
         let cart__item__content__settings=document.createElement("div");
@@ -45,18 +46,18 @@ function getProduct(url) {
         pDelete.setAttribute("class","deleteItem");
         pDelete.innerText="Supprimer";
         document.getElementById("cart__items").appendChild(article);
-        document.querySelector(`[data-id=${CSS.escape(productId)}]`).appendChild(cart__item__img);
-        document.querySelector(`[data-id=${CSS.escape(productId)}]`).appendChild(cart__item__content);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__img`).appendChild(img);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content`).appendChild(cart__item__content__titlePrice);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content`).appendChild(cart__item__content__settings);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__titlePrice`).appendChild(h2);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__titlePrice`).appendChild(pPrice);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__settings`).appendChild(cart__item__content__settings__quantity);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__settings`).appendChild(cart__item__content__settings__delete);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__settings__quantity`).appendChild(pQuantity);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__settings__quantity`).appendChild(input);
-        document.querySelector(`[data-id=${CSS.escape(productId)}] .cart__item__content__settings__delete`).appendChild(pDelete);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}]`).appendChild(cart__item__img);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}]`).appendChild(cart__item__content);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__img`).appendChild(img);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content`).appendChild(cart__item__content__titlePrice);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content`).appendChild(cart__item__content__settings);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__titlePrice`).appendChild(h2);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__titlePrice`).appendChild(pPrice);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__settings`).appendChild(cart__item__content__settings__quantity);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__settings`).appendChild(cart__item__content__settings__delete);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__settings__quantity`).appendChild(pQuantity);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__settings__quantity`).appendChild(input);
+        document.querySelector(`[data-id=${CSS.escape(productId+productColor)}] .cart__item__content__settings__delete`).appendChild(pDelete);
     }
 }
 
