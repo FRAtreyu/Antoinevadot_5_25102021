@@ -33,17 +33,17 @@ async function sendProduct() {
     let product = await getProduct();
     let quantity = document.getElementById("quantity").value;
     let productColor = selectValue();
-    let localStorageKey=product._id+productColor;
-    let productArray=[product._id,productColor,quantity]
-    if (!localStorage.getItem(localStorageKey)){
-        localStorage.setItem(localStorageKey,JSON.stringify(productArray));
-    }else{
-        let array=JSON.parse(localStorage.getItem(localStorageKey));
-        let initQty=Number(array[2]);
-        array[2]=Number(quantity) + initQty;
-        localStorage.setItem(localStorageKey,JSON.stringify(array));
+    let localStorageKey = product._id + productColor;
+    let productArray = [product._id, productColor, quantity]
+    if (!localStorage.getItem(localStorageKey)) {
+        localStorage.setItem(localStorageKey, JSON.stringify(productArray));
+    } else {
+        let array = JSON.parse(localStorage.getItem(localStorageKey));
+        let initQty = Number(array[2]);
+        array[2] = Number(quantity) + initQty;
+        localStorage.setItem(localStorageKey, JSON.stringify(array));
     }
 }
 
 displayProduct();
-document.getElementById("addToCart").addEventListener("click",sendProduct);
+document.getElementById("addToCart").addEventListener("click", sendProduct);
