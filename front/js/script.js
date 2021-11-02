@@ -1,8 +1,8 @@
-function getProducts() {
+function getProducts() {// retourne le tableau JSON avec les objets produits
     return fetch("http://localhost:3000/api/products").then((r) => r.json());
-}// retourne le tableau JSON avec les objets produits
+}
 
-async function displayProducts() {
+async function displayProducts() {//affiche les produits sur la page d'accueil
     let products = await getProducts();//enregistre le tableau JSON
     for (let product of products) {//boucle pour tous les éléments du tableau
         let a = document.createElement("a");
