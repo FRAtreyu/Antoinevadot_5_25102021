@@ -86,11 +86,7 @@ async function loadPage(){
     await setTotals();
     let tabDeleteItem=document.querySelectorAll(".deleteItem");
     console.log(tabDeleteItem);
-    for (let tabDeleteItemElement of tabDeleteItem) {
-        let id=tabDeleteItemElement.dataset.id;
-        console.log(id);
-        tabDeleteItemElement.addEventListener("Click",localStorage.removeItem(id));
-    }
+
 }
 
 loadPage();
