@@ -81,7 +81,7 @@ async function setTotals() {//affiche les totaux du panier
     document.getElementById("totalPrice").innerText = totalPrice;
 }
 
-function deleteItem(element){
+function deleteItem(element){//supprime l'item dans le DOM et le localStorage
     let deleteId=element.dataset.id;
     let parentNode=element.closest("section");
     let childNode=element.closest("article");
@@ -93,7 +93,7 @@ function deleteItem(element){
     setTotals();
 }
 
-function modifyQuantity(element){
+function modifyQuantity(element){//modifie la quantité dans le local storage
     let newValue=element.value;
     let modifyId=element.dataset.id;
     console.log(newValue);
@@ -104,7 +104,7 @@ function modifyQuantity(element){
     setTotals();
 }
 
-async function loadPage(){
+async function loadPage(){//lance les fonctions dans l'ordre et initialise les listener
     await displayBasket();
     await setTotals();
     let tabDelete=document.querySelectorAll(".deleteItem");
