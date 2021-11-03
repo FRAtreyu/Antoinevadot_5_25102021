@@ -2,7 +2,6 @@ function getProduct(url) {
     return fetch(url).then((r) => r.json());
 }
 
-
 async function displayBasket() {//affiche les différents produits présents dans le local storage
     for (let i = 0; i < localStorage.length; i++) {
         let productArray = JSON.parse(localStorage.getItem(localStorage.key(i)));
@@ -81,10 +80,10 @@ async function setTotals() {//affiche les totaux du panier
     document.getElementById("totalPrice").innerText = totalPrice;
 }
 
-function deleteItem(element){//supprime l'item dans le DOM et le localStorage
-    let deleteId=element.dataset.id;
-    let parentNode=element.closest("section");
-    let childNode=element.closest("article");
+function deleteItem(element) {//supprime l'item dans le DOM et le localStorage
+    let deleteId = element.dataset.id;
+    let parentNode = element.closest("section");
+    let childNode = element.closest("article");
     console.log(childNode);
     console.log(deleteId);
     console.log(parentNode);
@@ -93,9 +92,9 @@ function deleteItem(element){//supprime l'item dans le DOM et le localStorage
     setTotals();
 }
 
-function modifyQuantity(element){//modifie la quantité dans le local storage
-    let newValue=element.value;
-    let modifyId=element.dataset.id;
+function modifyQuantity(element) {//modifie la quantité dans le localStorage
+    let newValue = element.value;
+    let modifyId = element.dataset.id;
     console.log(newValue);
     console.log(modifyId);
     let array = JSON.parse(localStorage.getItem(modifyId));
@@ -104,22 +103,77 @@ function modifyQuantity(element){//modifie la quantité dans le local storage
     setTotals();
 }
 
-async function loadPage(){//lance les fonctions dans l'ordre et initialise les listener
-    await displayBasket();
-    await setTotals();
-    let tabDelete=document.querySelectorAll(".deleteItem");
-    let tabModify=document.querySelectorAll(".itemQuantity");
-    console.log(tabDelete);
-    console.log(tabModify);
-    for (let tabModifyElement of tabModify) {
-        tabModifyElement.addEventListener('change',function (){modifyQuantity(tabModifyElement)},false);
+function isValidAlphaString(value) {//regex firstName,lastName,city
+    return /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value);
+}
 
+function isValidAdress(value) {//regex address
+    return /^[0-9]+[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value);
+}
+
+function formErrorAlphaDisplay(id) {
+    document.getElementById(`${CSS.escape(id)}ErrorMsg`).innerText = "Veuillez rentrer un champ valide";
+}
+
+function validateForm() {
+    let alphaString = ["firstName", "lastName", "city"];
+    for (let string of alphaString) {
+        document.getElementById(`${CSS.escape(string)}`).addEventListener('change', function () {
+            if (!isValidAlphaString(document.querySelector(`input[id=${CSS.escape(string)}]`).value)) {
+                formErrorAlphaDisplay(string);
+            } else {
+                document.getElementById(`${CSS.escape(string)}ErrorMsg`).innerText = "";
+            }
+        })
     }
-    for (let tabDeleteElement of tabDelete) {
-        tabDeleteElement.addEventListener('click',function (){deleteItem(tabDeleteElement)},false);
+    document.getElementById("address").addEventListener('change', function () {
+        if (!isValidAdress(document.getElementById("address").value)) {
+            formErrorAlphaDisplay("address");
+        } else {
+            document.getElementById(`addressErrorMsg`).innerText = "";
+        }
+    })
+}
+
+function sendOrder() {
+    let productOrderArray= [];
+    for(let i=0; i<localStorage.length;i++){
+        let productArray = JSON.parse(localStorage.getItem(localStorage.key(i)));
+        productOrderArray[i] = productArray[0];
     }
+    console.log(productOrderArray);
+
+    let contactObject = {
+        firstName: document.getElementById("firstName").value,
+        lastName: document.getElementById("lastName").value,
+        address: document.getElementById("address").value,
+        city: document.getElementById("city").value,
+        email: document.getElementById("email").value
+    };
+    console.log(contactObject);
 
 }
 
-loadPage();
+async function loadPage() {//lance les fonctions dans l'ordre et initialise les listener
+    await displayBasket();
+    await setTotals();
+    let tabDelete = document.querySelectorAll(".deleteItem");
+    let tabModify = document.querySelectorAll(".itemQuantity");
+    console.log(tabDelete);
+    console.log(tabModify);
+    for (let tabModifyElement of tabModify) {
+        tabModifyElement.addEventListener('change', function () {
+            modifyQuantity(tabModifyElement)
+        }, false);
 
+    }
+    for (let tabDeleteElement of tabDelete) {
+        tabDeleteElement.addEventListener('click', function () {
+            deleteItem(tabDeleteElement)
+        }, false);
+    }
+}
+
+loadPage();
+validateForm();
+sendOrder();
