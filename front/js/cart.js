@@ -81,11 +81,43 @@ async function setTotals() {//affiche les totaux du panier
     document.getElementById("totalPrice").innerText = totalPrice;
 }
 
+function deleteItem(element){
+    let deleteId=element.dataset.id;
+    let parentNode=element.closest("section");
+    let childNode=element.closest("article");
+    console.log(childNode);
+    console.log(deleteId);
+    console.log(parentNode);
+    parentNode.removeChild(childNode);
+    localStorage.removeItem(deleteId);
+    setTotals();
+}
+
+function modifyQuantity(element){
+    let newValue=element.value;
+    let modifyId=element.dataset.id;
+    console.log(newValue);
+    console.log(modifyId);
+    let array = JSON.parse(localStorage.getItem(modifyId));
+    array[2] = Number(newValue);
+    localStorage.setItem(modifyId, JSON.stringify(array));
+    setTotals();
+}
+
 async function loadPage(){
     await displayBasket();
     await setTotals();
-    let tabDeleteItem=document.querySelectorAll(".deleteItem");
-    console.log(tabDeleteItem);
+    let tabDelete=document.querySelectorAll(".deleteItem");
+    let tabModify=document.querySelectorAll(".itemQuantity");
+    console.log(tabDelete);
+    console.log(tabModify);
+    for (let tabModifyElement of tabModify) {
+        tabModifyElement.addEventListener('change',function (){modifyQuantity(tabModifyElement)},false);
+
+    }
+    for (let tabDeleteElement of tabDelete) {
+        tabDeleteElement.addEventListener('click',function (){deleteItem(tabDeleteElement)},false);
+    }
 
 }
 
