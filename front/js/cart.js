@@ -108,9 +108,12 @@ function isValidAlphaString(value) {//regex firstName,lastName,city
 }
 
 function isValidAddress(value) {//regex address
-    return /^[0-9]+[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value);
+    return (/^\s*\S+(?:\s+\S+){2}/ || /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value)  && /^\s*$/).test(value);
 }
 
+function isValidEmail(value){//regex email
+    return (/^\S+@\S+\.\S+$/ && /^\s*$/).test(value);
+}
 function formErrorAlphaDisplay(id) {
     document.getElementById(`${CSS.escape(id)}ErrorMsg`).innerText = "Veuillez rentrer un champ valide";
 }
@@ -127,17 +130,31 @@ function validateForm() {
         })
     }
     document.getElementById("address").addEventListener('change', function () {
-        if (!isValidAddress(document.getElementById("address").value)) {
+        if (!isValidAddress(document.getElementById("address").value) && document.getElementById("address").value==="") {
             formErrorAlphaDisplay("address");
         } else {
             document.getElementById(`addressErrorMsg`).innerText = "";
         }
     })
+    document.getElementById("email").addEventListener('change', function (){
+        if (!isValidEmail(document.getElementById("email").value)) {
+            formErrorAlphaDisplay("email");
+        } else {
+            document.getElementById(`emailErrorMsg`).innerText = "";
+        }
+    })
+    return document.getElementById(`firstNameErrorMsg`).innerText === ""
+        && document.getElementById(`lastNameErrorMsg`).innerText === ""
+        && document.getElementById(`addressErrorMsg`).innerText === ""
+        && document.getElementById(`cityErrorMsg`).innerText === ""
+        && document.getElementById('emailErrorMsg').innerText==="";
 }
 
-function sendOrder(event) {
+
+async function sendOrder(event) {
     event.preventDefault();
-    if (localStorage.length > 0) {
+    let formValid = await validateForm();
+    if (localStorage.length > 0 && formValid) {
         let products = [];
         for (let i = 0; i < localStorage.length; i++) {
             let productArray = JSON.parse(localStorage.getItem(localStorage.key(i)));
@@ -153,20 +170,19 @@ function sendOrder(event) {
             email: document.getElementById("email").value
         };
         console.log(contact);
-        (async () => {
-            const rawResponse = await fetch('http://localhost:3000/api/products/order', {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({contact,products})
-            });
-            const content = await rawResponse.json();
-            let orderId=content.orderId;
-            document.location.href="./confirmation.html?id="+orderId;
-        })();
+        const rawResponse = await fetch('http://localhost:3000/api/products/order', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({contact, products})
+        });
+        const content = await rawResponse.json();
+        let orderId = content.orderId;
+        document.location.href = "./confirmation.html?id=" + orderId;
     }
+
 }
 
 async function loadPage() {//lance les fonctions dans l'ordre et initialise les listener
