@@ -107,7 +107,7 @@ function isValidAlphaString(value) {//regex firstName,lastName,city
     return /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value);
 }
 
-function isValidAdress(value) {//regex address
+function isValidAddress(value) {//regex address
     return /^[0-9]+[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value);
 }
 
@@ -127,7 +127,7 @@ function validateForm() {
         })
     }
     document.getElementById("address").addEventListener('change', function () {
-        if (!isValidAdress(document.getElementById("address").value)) {
+        if (!isValidAddress(document.getElementById("address").value)) {
             formErrorAlphaDisplay("address");
         } else {
             document.getElementById(`addressErrorMsg`).innerText = "";
@@ -135,23 +135,38 @@ function validateForm() {
     })
 }
 
-function sendOrder() {
-    let productOrderArray= [];
-    for(let i=0; i<localStorage.length;i++){
-        let productArray = JSON.parse(localStorage.getItem(localStorage.key(i)));
-        productOrderArray[i] = productArray[0];
+function sendOrder(event) {
+    event.preventDefault();
+    if (localStorage.length > 0) {
+        let productID = [];
+        for (let i = 0; i < localStorage.length; i++) {
+            let productArray = JSON.parse(localStorage.getItem(localStorage.key(i)));
+            productID[i] = productArray[0]+productArray[1];
+        }
+        console.log(productID);
+
+        let contact = {
+            firstName: document.getElementById("firstName").value,
+            lastName: document.getElementById("lastName").value,
+            address: document.getElementById("address").value,
+            city: document.getElementById("city").value,
+            email: document.getElementById("email").value
+        };
+        console.log(contact);
+        (async () => {
+            const rawResponse = await fetch('http://localhost:3000/api/products/order', {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({contact,productID})
+            });
+            const content = await rawResponse.json();
+
+            console.log(content);
+        })();
     }
-    console.log(productOrderArray);
-
-    let contactObject = {
-        firstName: document.getElementById("firstName").value,
-        lastName: document.getElementById("lastName").value,
-        address: document.getElementById("address").value,
-        city: document.getElementById("city").value,
-        email: document.getElementById("email").value
-    };
-    console.log(contactObject);
-
 }
 
 async function loadPage() {//lance les fonctions dans l'ordre et initialise les listener
@@ -176,4 +191,4 @@ async function loadPage() {//lance les fonctions dans l'ordre et initialise les 
 
 loadPage();
 validateForm();
-sendOrder();
+document.getElementById("order").addEventListener('click', sendOrder);
