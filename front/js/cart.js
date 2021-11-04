@@ -103,17 +103,22 @@ function modifyQuantity(element) {//modifie la quantité dans le localStorage
     setTotals();
 }
 
+function isnotEmpty(value) {
+    return /.*\S.*/.test(value);
+}
+
 function isValidAlphaString(value) {//regex firstName,lastName,city
-    return /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value);
+    return /^[a-zàâçéèêëîïôûùüÿñæœ'-]*$/i.test(value) && isnotEmpty(value);
 }
 
 function isValidAddress(value) {//regex address
-    return (/^\s*\S+(?:\s+\S+){2}/ || /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i.test(value)  && /^\s*$/).test(value);
+    return (/^\s*\S+(?:\s+\S+){2}/ || /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i).test(value) && isnotEmpty(value);
 }
 
-function isValidEmail(value){//regex email
-    return (/^\S+@\S+\.\S+$/ && /^\s*$/).test(value);
+function isValidEmail(value) {//regex email
+    return /^\S+@\S+\.\S+$/.test(value) && isnotEmpty(value);
 }
+
 function formErrorAlphaDisplay(id) {
     document.getElementById(`${CSS.escape(id)}ErrorMsg`).innerText = "Veuillez rentrer un champ valide";
 }
@@ -122,32 +127,33 @@ function validateForm() {
     let alphaString = ["firstName", "lastName", "city"];
     for (let string of alphaString) {
         document.getElementById(`${CSS.escape(string)}`).addEventListener('change', function () {
-            if (!isValidAlphaString(document.querySelector(`input[id=${CSS.escape(string)}]`).value)) {
-                formErrorAlphaDisplay(string);
-            } else {
+            if (isValidAlphaString(document.querySelector(`input[id=${CSS.escape(string)}]`).value)) {
                 document.getElementById(`${CSS.escape(string)}ErrorMsg`).innerText = "";
+            } else {
+                formErrorAlphaDisplay(string);
             }
         })
     }
     document.getElementById("address").addEventListener('change', function () {
-        if (!isValidAddress(document.getElementById("address").value) && document.getElementById("address").value==="") {
-            formErrorAlphaDisplay("address");
-        } else {
+        if (isValidAddress(document.getElementById("address").value)) {
+
             document.getElementById(`addressErrorMsg`).innerText = "";
+        } else {
+            formErrorAlphaDisplay("address");
         }
     })
-    document.getElementById("email").addEventListener('change', function (){
-        if (!isValidEmail(document.getElementById("email").value)) {
-            formErrorAlphaDisplay("email");
-        } else {
+    document.getElementById("email").addEventListener('change', function () {
+        if (isValidEmail(document.getElementById("email").value)) {
             document.getElementById(`emailErrorMsg`).innerText = "";
+        } else {
+            formErrorAlphaDisplay("email");
         }
     })
     return document.getElementById(`firstNameErrorMsg`).innerText === ""
         && document.getElementById(`lastNameErrorMsg`).innerText === ""
         && document.getElementById(`addressErrorMsg`).innerText === ""
         && document.getElementById(`cityErrorMsg`).innerText === ""
-        && document.getElementById('emailErrorMsg').innerText==="";
+        && document.getElementById('emailErrorMsg').innerText === "";
 }
 
 
@@ -206,5 +212,10 @@ async function loadPage() {//lance les fonctions dans l'ordre et initialise les 
 }
 
 loadPage();
+document.getElementById("firstNameErrorMsg").innerText = "Champ obligatoire";
+document.getElementById("lastNameErrorMsg").innerText = "Champ obligatoire";
+document.getElementById("addressErrorMsg").innerText = "Champ obligatoire";
+document.getElementById("cityErrorMsg").innerText = "Champ obligatoire";
+document.getElementById("emailErrorMsg").innerText = "Champ obligatoire";
 validateForm();
 document.getElementById("order").addEventListener('click', sendOrder);
