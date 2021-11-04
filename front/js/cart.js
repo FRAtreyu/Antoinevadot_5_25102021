@@ -138,12 +138,12 @@ function validateForm() {
 function sendOrder(event) {
     event.preventDefault();
     if (localStorage.length > 0) {
-        let productID = [];
+        let products = [];
         for (let i = 0; i < localStorage.length; i++) {
             let productArray = JSON.parse(localStorage.getItem(localStorage.key(i)));
-            productID[i] = productArray[0]+productArray[1];
+            products[i] = productArray[0];
         }
-        console.log(productID);
+        console.log(products);
 
         let contact = {
             firstName: document.getElementById("firstName").value,
@@ -160,11 +160,11 @@ function sendOrder(event) {
                     'Accept': 'application/json',
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({contact,productID})
+                body: JSON.stringify({contact,products})
             });
             const content = await rawResponse.json();
-
-            console.log(content);
+            let orderId=content.orderId;
+            document.location.href="./confirmation.html?id="+orderId;
         })();
     }
 }
