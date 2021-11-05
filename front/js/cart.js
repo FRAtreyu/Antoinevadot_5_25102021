@@ -1,4 +1,4 @@
-function getProduct(url) {
+function getProduct(url) {//retourne le tableau avec les infos du produit de la page concernée
     return fetch(url).then((r) => r.json());
 }
 
@@ -103,7 +103,7 @@ function modifyQuantity(element) {//modifie la quantité dans le localStorage
     setTotals();
 }
 
-function isnotEmpty(value) {
+function isnotEmpty(value) {//vérifie que l'input soit pas une empty string ou que des espaces
     return /.*\S.*/.test(value);
 }
 
@@ -119,11 +119,11 @@ function isValidEmail(value) {//regex email
     return /^\S+@\S+\.\S+$/.test(value) && isnotEmpty(value);
 }
 
-function formErrorAlphaDisplay(id) {
+function formErrorAlphaDisplay(id) {//affiche un message d'erreur dans le champ concerné
     document.getElementById(`${CSS.escape(id)}ErrorMsg`).innerText = "Veuillez rentrer un champ valide";
 }
 
-function validateForm() {
+function validateForm() {//check la validité de tous les champs du formulaire et affiche un message d'erreur le cas echéant
     let alphaString = ["firstName", "lastName", "city"];
     for (let string of alphaString) {
         document.getElementById(`${CSS.escape(string)}`).addEventListener('change', function () {
@@ -157,7 +157,7 @@ function validateForm() {
 }
 
 
-async function sendOrder(event) {
+async function sendOrder(event) {// créé les objets et envoie la commande avec l'API fournie
     event.preventDefault();
     let formValid = await validateForm();
     if (localStorage.length > 0 && formValid) {
@@ -186,7 +186,7 @@ async function sendOrder(event) {
         });
         const content = await rawResponse.json();
         let orderId = content.orderId;
-        document.location.href = "./confirmation.html?id=" + orderId;
+        document.location.href = "./confirmation.html?id=" + orderId;//envoie vers la page de confirmation
     }
 
 }

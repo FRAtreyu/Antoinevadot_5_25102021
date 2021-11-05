@@ -35,7 +35,7 @@ async function sendProduct() {//envoie les infos produit dans le localstorage po
     let productColor = selectValue();
     let localStorageKey = product._id + productColor;
     let productArray = [product._id, productColor, quantity]
-    if (!localStorage.getItem(localStorageKey) && Number(quantity)!==0) {
+    if (!localStorage.getItem(localStorageKey) && Number(quantity) !== 0) {
         localStorage.setItem(localStorageKey, JSON.stringify(productArray));
     } else {
         let array = JSON.parse(localStorage.getItem(localStorageKey));
@@ -43,6 +43,7 @@ async function sendProduct() {//envoie les infos produit dans le localstorage po
         array[2] = Number(quantity) + initQty;
         localStorage.setItem(localStorageKey, JSON.stringify(array));
     }
+
 }
 
 displayProduct();
