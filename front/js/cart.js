@@ -1,4 +1,4 @@
-function getProduct(url) {//retourne le tableau avec les infos du produit de la page concernée
+function getProduct(url) {//retourne le tableau avec les infos du produit de la page concernée @param {string} url
     return fetch(url).then((r) => r.json());
 }
 
@@ -80,7 +80,7 @@ async function setTotals() {//affiche les totaux du panier
     document.getElementById("totalPrice").innerText = totalPrice;
 }
 
-function deleteItem(element) {//supprime l'item dans le DOM et le localStorage
+function deleteItem(element) {//supprime l'item dans le DOM et le localStorage @param{DOM element} element
     let deleteId = element.dataset.id;
     let parentNode = element.closest("section");
     let childNode = element.closest("article");
@@ -92,7 +92,7 @@ function deleteItem(element) {//supprime l'item dans le DOM et le localStorage
     setTotals();
 }
 
-function modifyQuantity(element) {//modifie la quantité dans le localStorage
+function modifyQuantity(element) {//modifie la quantité dans le localStorage @param{DOM element} element
     let newValue = element.value;
     let modifyId = element.dataset.id;
     console.log(newValue);
@@ -103,23 +103,23 @@ function modifyQuantity(element) {//modifie la quantité dans le localStorage
     setTotals();
 }
 
-function isnotEmpty(value) {//vérifie que l'input soit pas une empty string ou que des espaces
+function isnotEmpty(value) {//vérifie que l'input soit pas une empty string ou que des espaces @param{string} value
     return /.*\S.*/.test(value);
 }
 
-function isValidAlphaString(value) {//regex firstName,lastName,city
+function isValidAlphaString(value) {//regex firstName,lastName,city @param{string} value
     return /^[a-zàâçéèêëîïôûùüÿñæœ'-]*$/i.test(value) && isnotEmpty(value);
 }
 
-function isValidAddress(value) {//regex address
+function isValidAddress(value) {//regex address @param{string} value
     return (/^\s*\S+(?:\s+\S+){2}/ || /^[a-zàâçéèêëîïôûùüÿñæœ '-]*$/i).test(value) && isnotEmpty(value);
 }
 
-function isValidEmail(value) {//regex email
+function isValidEmail(value) {//regex email @param{string} value
     return /^\S+@\S+\.\S+$/.test(value) && isnotEmpty(value);
 }
 
-function formErrorAlphaDisplay(id) {//affiche un message d'erreur dans le champ concerné
+function formErrorAlphaDisplay(id) {//affiche un message d'erreur dans le champ concerné @param{string} id
     document.getElementById(`${CSS.escape(id)}ErrorMsg`).innerText = "Veuillez rentrer un champ valide";
 }
 
