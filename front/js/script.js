@@ -24,7 +24,7 @@ try {
             article.appendChild(h3);
             article.appendChild(p);
         }
-    };
+    }
 } catch (error){
     console.log(error);
 }
