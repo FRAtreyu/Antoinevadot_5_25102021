@@ -69,7 +69,7 @@ try {
 }
 
 try {
-    async function setTotals() {//affiche les totaux du panier
+    async function setTotals() {// calcule et affiche les totaux du panier
         let totalPrice = 0;
         let totalQuantity = 0;
         for (let i = 0; i < localStorage.length; i++) {
