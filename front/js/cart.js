@@ -92,7 +92,11 @@ function deleteItem(element) {//supprime l'item dans le DOM et le localStorage @
     console.log(parentNode);
     parentNode.removeChild(childNode);
     localStorage.removeItem(deleteId);
-    setTotals();
+    try{
+        setTotals();
+    } catch (error){
+        console.error(error)
+    }
 }
 
 function modifyQuantity(element) {//modifie la quantité dans le localStorage @param{DOM element} element
@@ -103,7 +107,11 @@ function modifyQuantity(element) {//modifie la quantité dans le localStorage @p
     let array = JSON.parse(localStorage.getItem(modifyId));
     array[2] = Number(newValue);
     localStorage.setItem(modifyId, JSON.stringify(array));
-    setTotals();
+    try{
+        setTotals();
+    } catch (error){
+        console.error(error)
+    }
 }
 
 function isnotEmpty(value) {//vérifie que l'input soit pas une empty string ou que des espaces @param{string} value
